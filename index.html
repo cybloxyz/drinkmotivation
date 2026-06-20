@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DRINKMOTIVATION!!</title>
+        <style>
+            body {
+                display: flex;
+                flex-direction: column; 
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                font-family: Arial, sans-serif;
+                color: #ffffff;
+                text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+                text-align: center; 
+                padding: 20px;
+            }
+            #teks-quote {
+                font-size: 4.2rem;
+                font-weight: bold;
+                margin-bottom: 20px;
+            }
+            #penulis-quote {
+                font-size: 2rem;
+                font-style: italic;
+            }
+        </style>
+    </head>
+    <body></body>
+        <div id="teks-quote">LEMME SEARCH!</div>
+        <div id="penulis-quote"></div>
+
+        <script>
+            window.onload = function(){
+                const warnaRandom = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+                document.body.style.backgroundColor = warnaRandom;
+                
+                motivation_api();
+            };
+
+            function motivation_api() {
+                const apiKey = 'vcLXihVPJoUZDfcxgDxA0Ghp86HMkSPPcpBMB8Qx'; 
+                const apiUrl = 'https://api.api-ninjas.com/v2/randomquotes';
+
+                const teksQuote = document.getElementById('teks-quote');
+                const penulisQuote = document.getElementById('penulis-quote');
+
+                teksQuote.innerText = "Memuat...";
+                penulisQuote.innerText = "";
+
+                fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'X-Api-Key': apiKey,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Gagal mengambil data. Periksa API Key Anda.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const quoteTerpilih = data[0]; 
+                    
+                    teksQuote.innerText = `"${quoteTerpilih.quote}"`;
+                    penulisQuote.innerText = `- ${quoteTerpilih.author}`;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    teksQuote.innerText = "Gagal memuat kutipan. Silakan coba lagi.";
+                });
+            }
+        </script>
+    </body>
+</html>
